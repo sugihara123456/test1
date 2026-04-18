@@ -3,427 +3,392 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>高たんぱくオートミール 炊き込みご飯風 作る</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --cream:   #fdf6ec;
-      --warm:    #f5e6d0;
-      --brown:   #7c4d2f;
-      --dark:    #3b2415;
-      --orange:  #d4763b;
-      --green:   #5a7a4a;
-      --red:     #b54040;
-      --shadow:  rgba(60, 30, 10, 0.12);
-    }
-
-    body {
-      background: var(--cream);
-      font-family: 'Noto Sans JP', sans-serif;
-      color: var(--dark);
-      min-height: 100vh;
-      padding: 2rem 1rem 4rem;
-    }
-
-    .page {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    /* ── ヘッダー ── */
-    header {
-      text-align: center;
-      padding: 3rem 2rem 2.5rem;
-      background: linear-gradient(135deg, #c97b3a 0%, #a85c28 60%, #7c4020 100%);
-      border-radius: 20px;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 2rem;
-      box-shadow: 0 8px 32px var(--shadow);
-    }
-    header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='1'/%3E%3C/svg%3E") repeat;
-    }
-    .header-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
-    header h1 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      line-height: 1.4;
-    }
-    header .subtitle {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      opacity: 0.85;
-      letter-spacing: 0.08em;
-    }
-    .badge-row {
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      margin-top: 1.2rem;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: 50px;
-      padding: 0.3rem 0.9rem;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-    }
-
-    /* ── カード共通 ── */
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 1.8rem 2rem;
-      margin-bottom: 1.4rem;
-      box-shadow: 0 4px 18px var(--shadow);
-      border-top: 4px solid var(--orange);
-    }
-    .card-title {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--brown);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.2rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px dashed #e8d5be;
-    }
-    .card-title .icon { font-size: 1.3rem; }
-
-    /* ── 材料 ── */
-    .ingredients-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.7rem;
-    }
-    @media (max-width: 480px) { .ingredients-grid { grid-template-columns: 1fr; } }
-    .ingredient-item {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      background: var(--warm);
-      border-radius: 10px;
-      padding: 0.65rem 0.9rem;
-    }
-    .ingredient-item .dot {
-      width: 8px; height: 8px;
-      background: var(--orange);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .ingredient-item .name { font-weight: 500; font-size: 0.9rem; }
-    .ingredient-item .amount {
-      margin-left: auto;
-      font-size: 0.82rem;
-      color: var(--brown);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    /* ── 作り方 ── */
-    .steps { display: flex; flex-direction: column; gap: 0.9rem; }
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-    .step-num {
-      min-width: 36px; height: 36px;
-      background: var(--orange);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-    .step-body {
-      background: var(--warm);
-      border-radius: 10px;
-      padding: 0.7rem 1rem;
-      flex: 1;
-      font-size: 0.9rem;
-      line-height: 1.65;
-    }
-    .step-body .note {
-      display: inline-block;
-      margin-top: 0.3rem;
-      font-size: 0.78rem;
-      color: var(--brown);
-      font-weight: 600;
-    }
-
-    /* ── 仕上がり ── */
-    .result-grid { display: flex; flex-direction: column; gap: 0.6rem; }
-    .result-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.65rem 1rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
-    .result-item.ok  { background: #eaf5e4; border-left: 4px solid var(--green); }
-    .result-item.ng1 { background: #fdf0e0; border-left: 4px solid #e09030; }
-    .result-item.ng2 { background: #fdf0e0; border-left: 4px solid #e09030; }
-    .result-label { font-weight: 700; min-width: 3em; }
-    .result-item.ok  .result-label { color: var(--green); }
-    .result-item.ng1 .result-label,
-    .result-item.ng2 .result-label { color: #b07020; }
-
-    /* ── 味調整・味変 ── */
-    .adjust-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 0.7rem;
-    }
-    .adjust-item {
-      background: var(--warm);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      font-size: 0.87rem;
-      line-height: 1.5;
-    }
-    .adjust-item strong { display: block; color: var(--brown); margin-bottom: 0.2rem; }
-
-    /* ── 注意点 ── */
-    .notes-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-    .notes-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-    .notes-list li::before {
-      content: '⚠';
-      color: var(--red);
-      font-size: 0.85rem;
-      flex-shrink: 0;
-      margin-top: 0.1em;
-    }
-
-    /* ── 固定ルール ── */
-    .rules-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-    .rules-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-    .rules-list li::before {
-      content: '✔';
-      color: var(--green);
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    /* ── 最終形フッター ── */
-    .final {
-      background: linear-gradient(135deg, #4a7a38, #2e5a20);
-      color: #fff;
-      border-radius: 16px;
-      padding: 1.8rem 2rem;
-      text-align: center;
-      box-shadow: 0 4px 18px rgba(40, 90, 20, 0.2);
-    }
-    .final h2 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      opacity: 0.9;
-      letter-spacing: 0.05em;
-    }
-    .final-items {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.2rem;
-    }
-    .final-item {
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      padding: 0.8rem 1.4rem;
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    .final-item span { display: block; font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.15rem; }
-    .final-tagline {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      border-top: 1px solid rgba(255,255,255,0.25);
-      padding-top: 1rem;
-    }
-  </style>
+  <title>高たんぱくオートミール 炊き込みご飯風</title>
+  <meta property="og:title" content="高たんぱくオートミール 炊き込みご飯風">
+  <meta property="og:image" content="images/main.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- コントロールバー -->
+<div class="controls">
+  <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+  <div class="lang-toggle">
+    <button id="btn-jp" class="lang-btn active">JP</button>
+    <button id="btn-en" class="lang-btn">EN</button>
+  </div>
+</div>
+
 <div class="page">
 
   <!-- ヘッダー -->
   <header>
-    <div class="header-icon">🍚</div>
-    <h1>高たんぱくオートミール<br>炊き込みご飯風</h1>
-    <p class="subtitle">失敗しない完全版レシピ</p>
-    <div class="badge-row">
-      <span class="badge">1食分</span>
-      <span class="badge">電子レンジ調理</span>
-      <span class="badge">高たんぱく</span>
-      <span class="badge">時短</span>
+    <div class="header-inner">
+      <div class="badge-row">
+        <span class="badge"><span class="jp">1食分</span><span class="en">1 Serving</span></span>
+        <span class="badge"><span class="jp">電子レンジ調理</span><span class="en">Microwave</span></span>
+        <span class="badge"><span class="jp">総時間：約15分</span><span class="en">~15 min</span></span>
+        <span class="badge"><span class="jp">高たんぱく</span><span class="en">High Protein</span></span>
+      </div>
+      <h1>
+        <span class="jp">高たんぱくオートミール<br>炊き込みご飯風</span>
+        <span class="en">High-Protein<br>Oatmeal Rice Bowl</span>
+      </h1>
+      <p class="subtitle">
+        <span class="jp">失敗しない完全版レシピ</span>
+        <span class="en">The Complete Foolproof Recipe</span>
+      </p>
     </div>
   </header>
 
+  <!-- 水分比率ガイド -->
+  <div class="card card--ratio">
+    <div class="card-title">
+      <span class="icon">📐</span>
+      <span class="jp">水分比率ガイド（初心者向け）</span>
+      <span class="en">Water Ratio Guide</span>
+    </div>
+    <p class="ratio-rule">
+      <span class="jp">オートミール <strong>10g</strong> に対して 水 <strong>27〜33ml</strong>（基準 30ml）</span>
+      <span class="en">For every <strong>10g</strong> of oats, use <strong>27–33ml</strong> water (base: 30ml)</span>
+    </p>
+    <div class="ratio-calc">
+      <div class="ratio-input-row">
+        <label for="oat-amount"><span class="jp">オートミール</span><span class="en">Oats</span></label>
+        <input type="number" id="oat-amount" value="60" min="10" max="150" step="5">
+        <span>g</span>
+      </div>
+      <div class="ratio-output">
+        <div class="ratio-result">
+          <span class="ratio-label"><span class="jp">推奨水量</span><span class="en">Recommended</span></span>
+          <span class="ratio-value"><span id="water-base">180</span> ml</span>
+        </div>
+        <div class="ratio-range"><span class="jp">範囲：</span><span class="en">Range: </span><span id="water-min">160</span>–<span id="water-max">200</span> ml</div>
+      </div>
+    </div>
+    <p class="ratio-note">
+      <span class="jp">※ 機器・容器によって誤差があります。初回は基準値で試してください。</span>
+      <span class="en">※ Results may vary by appliance. Use the base value on your first try.</span>
+    </p>
+  </div>
+
   <!-- 材料 -->
   <div class="card">
-    <div class="card-title"><span class="icon">🛒</span>材料（1食分）</div>
-    <div class="ingredients-grid">
-      <div class="ingredient-item"><div class="dot"></div><span class="name">オートミール</span><span class="amount">30g</span></div>
-      <div class="ingredient-item"><div class="dot"></div><span class="name">水</span><span class="amount">80〜100ml</span></div>
-      <div class="ingredient-item"><div class="dot"></div><span class="name">鶏ガラスープの素</span><span class="amount">小さじ 1/3</span></div>
-      <div class="ingredient-item"><div class="dot"></div><span class="name">醤油</span><span class="amount">小さじ 1/2</span></div>
-      <div class="ingredient-item"><div class="dot"></div><span class="name">鶏むね肉</span><span class="amount">200g</span></div>
-      <div class="ingredient-item"><div class="dot"></div><span class="name">卵</span><span class="amount">1個</span></div>
+    <div class="card-title">
+      <span class="icon">🛒</span>
+      <span class="jp">材料（1食分）</span>
+      <span class="en">Ingredients (1 Serving)</span>
     </div>
+    <div class="ingredients-grid">
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">オートミール</span><span class="en">Rolled Oats</span></span><span class="amount">60g</span></div>
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">水</span><span class="en">Water</span></span><span class="amount">160–200ml</span></div>
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">鶏ガラスープの素</span><span class="en">Chicken Stock Powder</span></span><span class="amount"><span class="jp">小さじ 1/2</span><span class="en">½ tsp</span></span></div>
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">醤油</span><span class="en">Soy Sauce</span></span><span class="amount"><span class="jp">小さじ 1</span><span class="en">1 tsp</span></span></div>
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">鶏むね肉</span><span class="en">Chicken Breast</span></span><span class="amount">200g</span></div>
+      <div class="ingredient-item"><div class="dot"></div><span class="name"><span class="jp">卵</span><span class="en">Egg</span></span><span class="amount"><span class="jp">1個</span><span class="en">1</span></span></div>
+    </div>
+  </div>
+
+  <!-- 栄養情報 -->
+  <div class="card card--nutrition">
+    <div class="card-title">
+      <span class="icon">💪</span>
+      <span class="jp">栄養情報（1食分 目安）</span>
+      <span class="en">Nutrition Facts (est. per serving)</span>
+    </div>
+    <div class="nutrition-grid">
+      <div class="nutrition-item">
+        <span class="nutrition-value">~530</span>
+        <span class="nutrition-unit">kcal</span>
+        <span class="nutrition-label"><span class="jp">カロリー</span><span class="en">Calories</span></span>
+      </div>
+      <div class="nutrition-item highlight">
+        <span class="nutrition-value">~60</span>
+        <span class="nutrition-unit">g</span>
+        <span class="nutrition-label"><span class="jp">たんぱく質</span><span class="en">Protein</span></span>
+      </div>
+      <div class="nutrition-item">
+        <span class="nutrition-value">~44</span>
+        <span class="nutrition-unit">g</span>
+        <span class="nutrition-label"><span class="jp">炭水化物</span><span class="en">Carbs</span></span>
+      </div>
+      <div class="nutrition-item">
+        <span class="nutrition-value">~8</span>
+        <span class="nutrition-unit">g</span>
+        <span class="nutrition-label"><span class="jp">脂質</span><span class="en">Fat</span></span>
+      </div>
+    </div>
+    <p class="nutrition-note">
+      <span class="jp">※ 食材・調理法により変動します。目安として参考にしてください。</span>
+      <span class="en">※ Values vary by cooking method. Use as a reference only.</span>
+    </p>
   </div>
 
   <!-- 作り方 -->
   <div class="card">
-    <div class="card-title"><span class="icon">👨‍🍳</span>作り方</div>
+    <div class="card-title">
+      <span class="icon">👨‍🍳</span>
+      <span class="jp">作り方</span>
+      <span class="en">Instructions</span>
+    </div>
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          深めの耐熱容器に <strong>オートミール・水・鶏ガラスープの素・醤油</strong> を入れる
+          <span class="jp">深めの耐熱容器（容量 600ml 以上）に <strong>オートミール・水・鶏ガラスープの素・醤油</strong> を入れる</span>
+          <span class="en">Add <strong>rolled oats, water, chicken stock powder, and soy sauce</strong> to a deep microwave-safe bowl (600ml+ capacity)</span>
+          <span class="note"><span class="jp">容器が浅いと吹きこぼれます。深型の丼やマグカップがおすすめです。</span><span class="en">A shallow bowl will overflow. Use a deep bowl or large mug.</span></span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          軽く全体を混ぜる<br>
-          <span class="note">粉がダマにならないように</span>
+          <span class="jp">スプーンで全体をよく混ぜる</span>
+          <span class="en">Mix thoroughly with a spoon</span>
+          <span class="note"><span class="jp">鶏ガラスープの素が完全に溶けるまで混ぜるとダマになりません。</span><span class="en">Stir until the stock powder is fully dissolved to avoid lumps.</span></span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <strong>ラップなし</strong> で電子レンジ加熱<br>
-          <span class="note">600W：1分30秒〜2分</span>
+          <span class="jp"><strong>ラップなし</strong>で電子レンジ加熱する</span>
+          <span class="en">Microwave <strong>without plastic wrap</strong></span>
+          <span class="note"><span class="jp">600W：2分〜2分30秒 ／ 500W：2分30秒〜3分</span><span class="en">600W: 2 min – 2 min 30 sec &nbsp;/&nbsp; 500W: 2 min 30 sec – 3 min</span></span>
+          <span class="note"><span class="jp">ラップをすると蒸気がこもって水分が逃げず、ご飯に近い食感になりません。</span><span class="en">Covering traps steam and prevents the rice-like texture. Always cook uncovered.</span></span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
-          加熱後すぐに <strong>全体を混ぜる</strong><br>
-          <span class="note">ここで食感が整う</span>
+          <span class="jp">加熱後すぐに<strong>全体をよく混ぜる</strong></span>
+          <span class="en">Immediately after heating, <strong>stir thoroughly</strong></span>
+          <span class="note"><span class="jp">底と縁の固まった部分をほぐすと食感が均一になります。</span><span class="en">Break up any set portions at the bottom and edges to even out the texture.</span></span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">5</div>
         <div class="step-body">
-          別で調理した <strong>鶏むね肉</strong>（蒸す or 茹でる）を乗せる
+          <span class="jp">別で調理した <strong>鶏むね肉</strong> をほぐして乗せる</span>
+          <span class="en">Top with separately cooked <strong>chicken breast</strong>, shredded</span>
+          <span class="note"><span class="jp">→ 調理方法は下の「鶏むね肉の準備」を参照</span><span class="en">→ See "Chicken Breast Prep" below</span></span>
         </div>
       </div>
       <div class="step">
         <div class="step-num">6</div>
         <div class="step-body">
-          <strong>卵</strong> をそのまま乗せる、または別で加熱して乗せる
+          <span class="jp">別で調理した<strong>卵</strong>を乗せる</span>
+          <span class="en">Add the separately cooked <strong>egg</strong> on top</span>
+          <span class="note"><span class="jp">→ 調理方法は下の「卵の準備」を参照</span><span class="en">→ See "Egg Prep" below</span></span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 動画セクション -->
+  <div class="card card--video">
+    <div class="card-title">
+      <span class="icon">▶️</span>
+      <span class="jp">完成イメージ動画</span>
+      <span class="en">Finished Dish Preview</span>
+    </div>
+    <div class="video-wrapper">
+      <video src="images/oat.mp4" autoplay muted loop playsinline controls></video>
+    </div>
+  </div>
+
+  <!-- 鶏むね肉の準備 -->
+  <div class="card card--sub">
+    <div class="card-title">
+      <span class="icon">🍗</span>
+      <span class="jp">鶏むね肉の準備</span>
+      <span class="en">Chicken Breast Prep</span>
+    </div>
+    <div class="sub-methods">
+      <div class="sub-method">
+        <div class="sub-method-title">
+          <span class="jp">方法①：電子レンジで蒸す（おすすめ・時短）</span>
+          <span class="en">Method 1: Microwave (Recommended — Quick)</span>
+        </div>
+        <ol class="sub-steps jp">
+          <li>鶏むね肉を一口大（約3cm角）に切る</li>
+          <li>耐熱皿に並べ、塩をひとつまみ振る</li>
+          <li>ラップをして 600W で <strong>4〜5分</strong>（途中2分で裏返す）</li>
+          <li>中心が白くなれば完成。ピンクが残る場合は 30秒ずつ追加加熱する</li>
+        </ol>
+        <ol class="sub-steps en">
+          <li>Cut chicken breast into bite-sized pieces (~3cm)</li>
+          <li>Arrange on a microwave-safe plate and season with a pinch of salt</li>
+          <li>Cover with plastic wrap and microwave at 600W for <strong>4–5 min</strong> (flip at 2 min)</li>
+          <li>Done when the center turns white. If pink remains, add 30 sec at a time</li>
+        </ol>
+      </div>
+      <div class="sub-method">
+        <div class="sub-method-title">
+          <span class="jp">方法②：茹でる（しっとりに仕上がる）</span>
+          <span class="en">Method 2: Poaching (Juicier Result)</span>
+        </div>
+        <ol class="sub-steps jp">
+          <li>鍋に水を入れて沸騰させる</li>
+          <li>鶏むね肉を丸ごと入れ、<strong>すぐに火を止めてふたをする</strong></li>
+          <li>そのまま <strong>15〜20分</strong> 放置する（余熱で中まで火を通す）</li>
+          <li>取り出して手やフォークで食べやすくほぐす</li>
+        </ol>
+        <ol class="sub-steps en">
+          <li>Bring a pot of water to a boil</li>
+          <li>Add the whole chicken breast, then <strong>turn off the heat and cover</strong></li>
+          <li>Let sit for <strong>15–20 min</strong> (residual heat cooks it through)</li>
+          <li>Remove and shred with your hands or a fork</li>
+        </ol>
+        <span class="sub-note"><span class="jp">沸騰したまま煮るとパサつきます。火を止めて放置するのがポイントです。</span><span class="en">Boiling too long makes it dry. Residual heat is the key.</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 卵の準備 -->
+  <div class="card card--sub">
+    <div class="card-title">
+      <span class="icon">🥚</span>
+      <span class="jp">卵の準備</span>
+      <span class="en">Egg Prep</span>
+    </div>
+    <div class="sub-methods">
+      <div class="sub-method">
+        <div class="sub-method-title">
+          <span class="jp">方法①：電子レンジ温泉卵（おすすめ・最速）</span>
+          <span class="en">Method 1: Microwave Soft-Boiled Egg (Recommended — Fastest)</span>
+        </div>
+        <ol class="sub-steps jp">
+          <li>小さめの耐熱容器に卵を割り入れる</li>
+          <li><strong>黄身に爪楊枝で1〜2か所穴を開ける</strong>（破裂防止のため必ず行う）</li>
+          <li>水 大さじ1を加えてラップをする</li>
+          <li>600W で <strong>40〜50秒</strong>。黄身がうっすら白くなれば完成</li>
+        </ol>
+        <ol class="sub-steps en">
+          <li>Crack an egg into a small microwave-safe bowl</li>
+          <li><strong>Pierce the yolk 1–2 times with a toothpick</strong> (required — prevents bursting)</li>
+          <li>Add 1 tbsp of water and cover with plastic wrap</li>
+          <li>Microwave at 600W for <strong>40–50 sec</strong>. Done when the yolk is slightly set</li>
+        </ol>
+        <span class="sub-note"><span class="jp">加熱しすぎると黄身が固くなります。10秒ずつ様子を見て調整してください。</span><span class="en">Over-heating firms the yolk. Check in 10-sec increments.</span></span>
+      </div>
+      <div class="sub-method">
+        <div class="sub-method-title">
+          <span class="jp">方法②：ゆで卵</span>
+          <span class="en">Method 2: Boiled Egg</span>
+        </div>
+        <ol class="sub-steps jp">
+          <li>沸騰した湯に卵をそっと入れる</li>
+          <li>半熟：<strong>7分</strong> ／ 固ゆで：<strong>12分</strong></li>
+          <li>冷水にとって1〜2分冷やし、殻をむく</li>
+        </ol>
+        <ol class="sub-steps en">
+          <li>Gently lower the egg into boiling water</li>
+          <li>Soft boiled: <strong>7 min</strong> &nbsp;/&nbsp; Hard boiled: <strong>12 min</strong></li>
+          <li>Cool in cold water for 1–2 min, then peel</li>
+        </ol>
       </div>
     </div>
   </div>
 
   <!-- 仕上がり -->
   <div class="card">
-    <div class="card-title"><span class="icon">✅</span>仕上がりの目安</div>
+    <div class="card-title">
+      <span class="icon">✅</span>
+      <span class="jp">仕上がりの目安</span>
+      <span class="en">What to Expect</span>
+    </div>
     <div class="result-grid">
       <div class="result-item ok">
-        <span class="result-label">正常</span>
-        水分が軽く残った「柔らかいご飯状」
+        <span class="result-label"><span class="jp">正常</span><span class="en">Good</span></span>
+        <span class="jp">水分が軽く残った「柔らかいご飯状」。スプーンで混ぜるとまとまる感触</span>
+        <span class="en">Slightly moist, soft rice-like texture. Holds together when stirred</span>
       </div>
       <div class="result-item ng1">
-        <span class="result-label">失敗①</span>
-        ベチャベチャ（水多い）→ 次回は水を減らす
+        <span class="result-label"><span class="jp">失敗①</span><span class="en">Issue ①</span></span>
+        <span class="jp">ベチャベチャ（水多い）→ 次回は水を 20ml 減らす</span>
+        <span class="en">Too wet (too much water) → Reduce water by 20ml next time</span>
       </div>
       <div class="result-item ng2">
-        <span class="result-label">失敗②</span>
-        ボソボソ（水少ない）→ 次回は水を 10〜20ml 増やす
+        <span class="result-label"><span class="jp">失敗②</span><span class="en">Issue ②</span></span>
+        <span class="jp">ボソボソ（水少ない）→ 次回は水を 20ml 増やす</span>
+        <span class="en">Too dry (too little water) → Increase water by 20ml next time</span>
       </div>
     </div>
   </div>
 
   <!-- 味調整 -->
   <div class="card">
-    <div class="card-title"><span class="icon">🧂</span>味調整（食べる直前）</div>
+    <div class="card-title">
+      <span class="icon">🧂</span>
+      <span class="jp">味調整（食べる直前）</span>
+      <span class="en">Taste Adjustment (before eating)</span>
+    </div>
     <div class="adjust-grid">
-      <div class="adjust-item"><strong>薄い</strong>醤油を数滴ずつ追加</div>
-      <div class="adjust-item"><strong>コク不足</strong>ごま油を 2〜3 滴</div>
-      <div class="adjust-item"><strong>濃い</strong>水を少量加えて混ぜる</div>
+      <div class="adjust-item"><strong><span class="jp">薄い</span><span class="en">Too mild</span></strong><span class="jp">醤油を数滴ずつ追加</span><span class="en">Add soy sauce a few drops at a time</span></div>
+      <div class="adjust-item"><strong><span class="jp">コク不足</span><span class="en">Lacks depth</span></strong><span class="jp">ごま油を 2〜3 滴</span><span class="en">Add 2–3 drops of sesame oil</span></div>
+      <div class="adjust-item"><strong><span class="jp">濃い</span><span class="en">Too salty</span></strong><span class="jp">水を少量加えて混ぜる</span><span class="en">Add a splash of water and stir</span></div>
     </div>
   </div>
 
   <!-- 味変 -->
-  <div class="card" style="border-top-color: #8a6a3a;">
-    <div class="card-title"><span class="icon">🌶️</span>味変（必要な場合のみ）</div>
+  <div class="card card--variant">
+    <div class="card-title">
+      <span class="icon">🌶️</span>
+      <span class="jp">味変（必要な場合のみ）</span>
+      <span class="en">Flavor Variations (optional)</span>
+    </div>
     <div class="adjust-grid">
-      <div class="adjust-item"><strong>七味</strong>少量でOK</div>
-      <div class="adjust-item"><strong>刻みネギ</strong>風味アップ</div>
-      <div class="adjust-item"><strong>ブラックペッパー</strong>締まりが出る</div>
+      <div class="adjust-item"><strong><span class="jp">七味</span><span class="en">Shichimi</span></strong><span class="jp">少量でOK</span><span class="en">A small amount is enough</span></div>
+      <div class="adjust-item"><strong><span class="jp">刻みネギ</span><span class="en">Green Onion</span></strong><span class="jp">風味アップ</span><span class="en">Adds fresh aroma</span></div>
+      <div class="adjust-item"><strong><span class="jp">ブラックペッパー</span><span class="en">Black Pepper</span></strong><span class="jp">締まりが出る</span><span class="en">Sharpens the flavor</span></div>
     </div>
   </div>
 
   <!-- 注意点 -->
-  <div class="card" style="border-top-color: var(--red);">
-    <div class="card-title"><span class="icon">⚠️</span>重要な注意点</div>
+  <div class="card card--warning">
+    <div class="card-title">
+      <span class="icon">⚠️</span>
+      <span class="jp">重要な注意点</span>
+      <span class="en">Important Notes</span>
+    </div>
     <ul class="notes-list">
-      <li>最初から味を濃くしない（必ず飽きる）</li>
-      <li>水は入れすぎない（最大 100ml まで）</li>
-      <li>鶏肉と卵は一緒にレンチンしない（匂いと食感が悪化する）</li>
-      <li>必ず深めの容器を使う（吹きこぼれ防止）</li>
-      <li>加熱後は必ず混ぜる（食感安定のため）</li>
+      <li><span class="jp">最初から味を濃くしない（毎日食べると必ず飽きる。薄めに作って食べながら調整する）</span><span class="en">Don't over-season from the start. (Daily eating causes flavor fatigue. Season light and adjust while eating.)</span></li>
+      <li><span class="jp">水は入れすぎない（上の比率ガイドを目安にし、最大でも 200ml まで）</span><span class="en">Don't add too much water. (Use the ratio guide — maximum 200ml.)</span></li>
+      <li><span class="jp">鶏肉と卵はオートミールと一緒にレンチンしない（鶏肉から臭みが出て、卵は破裂の危険がある）</span><span class="en">Don't microwave the chicken or egg with the oatmeal. (Chicken causes odor; eggs can burst.)</span></li>
+      <li><span class="jp">必ず深めの容器を使う（オートミールは加熱中に大きく膨らむため吹きこぼれやすい）</span><span class="en">Always use a deep bowl. (Oatmeal expands significantly during heating and can overflow.)</span></li>
+      <li><span class="jp">加熱後は必ず混ぜる（底が固まりやすいため、全体を均一にほぐして食感を整える）</span><span class="en">Always stir immediately after heating. (The bottom sets quickly — stir to even out the texture.)</span></li>
     </ul>
   </div>
 
   <!-- 固定ルール -->
-  <div class="card" style="border-top-color: var(--green);">
-    <div class="card-title"><span class="icon">📌</span>固定ルール</div>
+  <div class="card card--rules">
+    <div class="card-title">
+      <span class="icon">📌</span>
+      <span class="jp">固定ルール</span>
+      <span class="en">Fixed Rules</span>
+    </div>
     <ul class="rules-list">
-      <li>味付けは「鶏ガラ＋醤油」から変えない</li>
-      <li>レシピを毎回変えない</li>
-      <li>水量と加熱時間だけ微調整する</li>
+      <li><span class="jp">味付けは「鶏ガラ＋醤油」から変えない</span><span class="en">Keep the seasoning as chicken stock + soy sauce — don't change it</span></li>
+      <li><span class="jp">レシピ自体を毎回変えない（安定した仕上がりのため）</span><span class="en">Don't change the recipe each time. (Consistency leads to stable results.)</span></li>
+      <li><span class="jp">調整するのは水量と加熱時間だけ</span><span class="en">Only adjust water amount and heating time</span></li>
     </ul>
   </div>
 
   <!-- 最終形 -->
   <div class="final">
-    <h2>このレシピの最終形</h2>
+    <h2><span class="jp">このレシピの最終形</span><span class="en">The Final Form of This Recipe</span></h2>
     <div class="final-items">
-      <div class="final-item"><span>主食</span>オートミール</div>
-      <div class="final-item"><span>たんぱく質</span>鶏むね肉 ＋ 卵</div>
+      <div class="final-item"><span><span class="jp">主食</span><span class="en">Main</span></span><span class="jp">オートミール 60g</span><span class="en">Rolled Oats 60g</span></div>
+      <div class="final-item"><span><span class="jp">たんぱく質</span><span class="en">Protein</span></span><span class="jp">鶏むね肉 200g ＋ 卵 1個</span><span class="en">Chicken Breast 200g + 1 Egg</span></div>
+      <div class="final-item"><span><span class="jp">たんぱく質量</span><span class="en">Protein per Meal</span></span>~60g</div>
     </div>
-    <p class="final-tagline">1食で完結する高たんぱく主食</p>
+    <p class="final-tagline"><span class="jp">1食で完結する高たんぱく主食</span><span class="en">A complete high-protein meal in one bowl</span></p>
   </div>
 
 </div>
+<script src="script.js"></script>
 </body>
 </html>

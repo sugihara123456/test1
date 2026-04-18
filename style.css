@@ -1,0 +1,581 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── カラー変数（ライトモード） ── */
+:root {
+  --bg:      #f4f0eb;
+  --surface: #ffffff;
+  --warm:    #ede3d6;
+  --brown:   #7c4d2f;
+  --dark:    #1e1209;
+  --orange:  #c96a2a;
+  --green:   #4a6e3a;
+  --red:     #a83535;
+  --blue:    #2d5f96;
+  --muted:   #7a6558;
+  --border:  rgba(120, 80, 40, 0.10);
+  --shadow:  rgba(30, 15, 5, 0.10);
+}
+
+/* ── ダークモード変数 ── */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg:      #130c05;
+    --surface: #1e1208;
+    --warm:    #2a1c10;
+    --brown:   #d4a070;
+    --dark:    #f0e4d0;
+    --orange:  #e07830;
+    --green:   #6aaa58;
+    --red:     #e05858;
+    --blue:    #5a90d8;
+    --muted:   #a09080;
+    --border:  rgba(255, 200, 150, 0.08);
+    --shadow:  rgba(0, 0, 0, 0.45);
+  }
+}
+html.dark {
+  --bg:      #130c05;
+  --surface: #1e1208;
+  --warm:    #2a1c10;
+  --brown:   #d4a070;
+  --dark:    #f0e4d0;
+  --orange:  #e07830;
+  --green:   #6aaa58;
+  --red:     #e05858;
+  --blue:    #5a90d8;
+  --muted:   #a09080;
+  --border:  rgba(255, 200, 150, 0.08);
+  --shadow:  rgba(0, 0, 0, 0.45);
+}
+
+/* ── 言語切り替え ── */
+.en { display: none; }
+html.lang-en .jp { display: none; }
+html.lang-en .en { display: revert; }
+
+/* ── トランジション ── */
+body, .card, .step-body, .ingredient-item, .ratio-calc,
+.nutrition-item, .sub-method, .adjust-item, .result-item,
+.notes-list li, .rules-list li, header {
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--dark);
+  min-height: 100vh;
+  padding: 0 1rem 5rem;
+}
+
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ── コントロールバー ── */
+.controls {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  padding: 0.35rem 0.7rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+}
+html.dark .controls {
+  background: rgba(30, 18, 8, 0.88);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+#theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.15rem 0.25rem;
+  border-radius: 50px;
+  transition: transform 0.2s;
+}
+#theme-toggle:hover { transform: rotate(20deg); }
+
+.lang-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--muted);
+  padding: 0.25rem 0.6rem;
+  letter-spacing: 0.05em;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-btn.active {
+  background: var(--orange);
+  color: #fff;
+  border-radius: 50px;
+}
+
+/* ── ヘッダー（画像背景） ── */
+header {
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: 0 0 28px 28px;
+  color: #fff;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: url('images/main.jpg') center 30% / cover no-repeat;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+}
+header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 5, 0, 0.90) 0%,
+    rgba(10, 5, 0, 0.50) 40%,
+    rgba(10, 5, 0, 0.05) 100%
+  );
+}
+.header-inner {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 2.5rem 2.5rem;
+}
+.badge-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+header h1 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+header .subtitle {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.1em;
+}
+
+/* ── カード共通 ── */
+.card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 20px var(--shadow);
+  border: 1px solid var(--border);
+}
+.card--ratio     { border-left: 3px solid var(--blue); }
+.card--nutrition { border-left: 3px solid var(--green); }
+.card--variant   { border-left: 3px solid #a07840; }
+.card--warning   { border-left: 3px solid var(--red); }
+.card--rules     { border-left: 3px solid var(--green); }
+.card--sub       { border-left: 3px solid var(--orange); }
+.card--video     { border-left: 3px solid #7a50b0; }
+
+.card-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--warm);
+}
+.card-title .icon { font-size: 1.2rem; }
+
+/* ── 比率ガイド ── */
+.ratio-rule {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  padding: 0.85rem 1.1rem;
+  background: color-mix(in srgb, var(--blue) 8%, var(--surface));
+  border-radius: 12px;
+  border-left: 3px solid var(--blue);
+  color: var(--dark);
+}
+.ratio-rule strong { color: var(--blue); font-size: 1.05em; }
+
+.ratio-calc {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: var(--warm);
+  border-radius: 14px;
+  padding: 1.1rem 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+}
+.ratio-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.ratio-input-row input {
+  width: 78px;
+  padding: 0.45rem 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: 2px solid var(--orange);
+  border-radius: 10px;
+  text-align: center;
+  background: var(--surface);
+  color: var(--dark);
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.ratio-input-row input:focus { outline: none; border-color: var(--blue); }
+.ratio-output { display: flex; flex-direction: column; gap: 0.25rem; }
+.ratio-result { display: flex; align-items: baseline; gap: 0.5rem; }
+.ratio-label { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+.ratio-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--blue);
+  font-family: 'Noto Serif JP', serif;
+  line-height: 1;
+}
+.ratio-range { font-size: 0.8rem; color: var(--muted); }
+.ratio-note  { font-size: 0.76rem; color: var(--muted); }
+
+/* ── 材料 ── */
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+@media (max-width: 480px) { .ingredients-grid { grid-template-columns: 1fr; } }
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--warm);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+}
+.ingredient-item .dot {
+  width: 7px; height: 7px;
+  background: var(--orange);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ingredient-item .name { font-weight: 500; font-size: 0.88rem; }
+.ingredient-item .amount {
+  margin-left: auto;
+  font-size: 0.82rem;
+  color: var(--brown);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ── 栄養情報 ── */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+@media (max-width: 480px) { .nutrition-grid { grid-template-columns: repeat(2, 1fr); } }
+.nutrition-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--warm);
+  border-radius: 14px;
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+.nutrition-item.highlight {
+  background: color-mix(in srgb, var(--green) 12%, var(--surface));
+  border: 1.5px solid var(--green);
+}
+.nutrition-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark);
+  font-family: 'Noto Serif JP', serif;
+  line-height: 1.1;
+}
+.nutrition-item.highlight .nutrition-value { color: var(--green); }
+.nutrition-unit  { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.2rem; }
+.nutrition-label { font-size: 0.74rem; font-weight: 600; color: var(--muted); }
+.nutrition-note  { font-size: 0.76rem; color: var(--muted); }
+
+/* ── 作り方 ── */
+.steps { display: flex; flex-direction: column; gap: 0.85rem; }
+.step  { display: flex; align-items: flex-start; gap: 1rem; }
+.step-num {
+  min-width: 34px; height: 34px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(201, 106, 42, 0.35);
+}
+.step-body {
+  background: var(--warm);
+  border-radius: 12px;
+  padding: 0.75rem 1.1rem;
+  flex: 1;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.step-body .note {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.76rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── 動画 ── */
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+.video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--warm);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.video-placeholder-icon {
+  width: 56px; height: 56px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  padding-left: 4px;
+  box-shadow: 0 4px 16px rgba(201, 106, 42, 0.4);
+}
+.video-placeholder p { font-size: 0.95rem; font-weight: 600; color: var(--dark); }
+.video-placeholder-hint { font-size: 0.76rem !important; color: var(--muted) !important; font-weight: 400 !important; }
+
+/* ── サブカード（鶏肉・卵の準備） ── */
+.sub-methods { display: flex; flex-direction: column; gap: 1.2rem; }
+.sub-method {
+  background: var(--warm);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--border);
+}
+.sub-method-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--brown);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.sub-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  counter-reset: sub-step;
+}
+.sub-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  counter-increment: sub-step;
+}
+.sub-steps li::before {
+  content: counter(sub-step);
+  min-width: 22px; height: 22px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.15em;
+}
+.sub-note {
+  display: block;
+  margin-top: 0.7rem;
+  font-size: 0.76rem;
+  color: var(--brown);
+  background: color-mix(in srgb, var(--orange) 8%, transparent);
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+}
+
+/* ── 仕上がり ── */
+.result-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 12px;
+  font-size: 0.87rem;
+  line-height: 1.55;
+}
+.result-item.ok  { background: color-mix(in srgb, var(--green) 12%, var(--surface)); border-left: 3px solid var(--green); }
+.result-item.ng1 { background: color-mix(in srgb, #d08020 10%, var(--surface)); border-left: 3px solid #d08020; }
+.result-item.ng2 { background: color-mix(in srgb, #d08020 10%, var(--surface)); border-left: 3px solid #d08020; }
+.result-label { font-weight: 700; min-width: 3.5em; font-size: 0.82rem; }
+.result-item.ok  .result-label { color: var(--green); }
+.result-item.ng1 .result-label,
+.result-item.ng2 .result-label { color: #a06010; }
+
+/* ── 味調整・味変 ── */
+.adjust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.7rem;
+}
+.adjust-item {
+  background: var(--warm);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+.adjust-item strong { display: block; color: var(--brown); margin-bottom: 0.2rem; font-size: 0.9rem; }
+
+/* ── 注意点 ── */
+.notes-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.notes-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.87rem;
+  line-height: 1.65;
+}
+.notes-list li::before {
+  content: '⚠';
+  color: var(--red);
+  font-size: 0.82rem;
+  flex-shrink: 0;
+  margin-top: 0.15em;
+}
+
+/* ── 固定ルール ── */
+.rules-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.87rem;
+  line-height: 1.65;
+}
+.rules-list li::before {
+  content: '✔';
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── 最終形フッター ── */
+.final {
+  background: linear-gradient(135deg, #3d6830 0%, #254818 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 2rem 2.2rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(30, 70, 15, 0.25);
+}
+.final h2 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+  opacity: 0.8;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+.final-items {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+.final-item {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  padding: 0.9rem 1.5rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.final-item > span:first-child { display: block; font-size: 0.72rem; opacity: 0.7; margin-bottom: 0.2rem; letter-spacing: 0.06em; }
+.final-tagline {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1.1rem;
+}
